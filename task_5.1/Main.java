@@ -1,3 +1,13 @@
+
+/*
+ * Дана коллекция имён.
+ * 1) удалить все повторяющиеся имена из коллекции
+ * 2) вывести коллекцию на экран
+ * */
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -10,14 +20,10 @@ public class Main {
         names.add("Руслан");
 
         for (int i = 0; i < names.size(); i++) {
-
-            if (names.indexOf(names.get(i))==-1){
-                System.out.println("нет совп");
-
-            }
-            else
+            if (names.lastIndexOf(names.get(i))!=i){
                 names.remove(i);
-          
+                i--;
+            }
         }
         System.out.println(names);
     }
