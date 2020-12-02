@@ -1,5 +1,4 @@
 
-
 /*
 1. Ввести путь к файлу с консоли.
 2. Прочитать из него набор чисел.
@@ -21,6 +20,7 @@
 */
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Scanner;
 import java.util.ArrayList;
 public class Main {
@@ -29,28 +29,38 @@ public class Main {
         System.out.println("Введите путь");
         String scan = scann.nextLine();
         scan = "C://java//test.txt";//временно чтобы не вводить постоянно
-        ArrayList<Integer> numberr = new ArrayList();//массив для четных чисел
-        String newnum = "л";
-        try {
-            FileReader reader = new FileReader(scan);
+        ArrayList<String> numberr = new ArrayList<>();//массив для четных чисел
+        String newnum = "";
+        try { FileReader reader = new FileReader(scan);
             int c;
-
             while ((c = reader.read()) != -1) {
-                if ((c != 10) && (c != 13))//убираем лишние символы
-                    System.out.println(c);
-                newnum += (char) c; //копируем символы из файла в новую переменную стринг
+                System.out.println(c);
+                if (c == 13) {
+                    continue;
+                } else if (c == 10) {
+                    numberr.add(newnum);
+                    newnum = "";
+                } else newnum = newnum + (char) c;
             }
             reader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println(newnum);
-        //перевод string в int
+        System.out.println("коллекция String" + numberr); //STring массив
+
+        ArrayList<Integer> numberr2 = new ArrayList<>();
         try {
-            int i = Integer.parseInt(newnum.trim());
-            System.out.print("int i=" + newnum);
-        } catch (NumberFormatException nfe){
-            System.out.println("\nNumberFormatException: " +"\n"+ nfe.getMessage());
-    }
+            for (String cint : numberr) {
+                int newcint = Integer.parseInt(cint);
+                if (newcint % 2 == 0)
+                    numberr2.add(newcint);
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        System.out.println("цифровой массив коллекция"+numberr2);
+        Collections.sort(numberr2);
+        System.out.println("отсортированный "+numberr2);
     }
 }
