@@ -28,7 +28,7 @@ public class Main {
         Scanner scann = new Scanner(System.in);
         System.out.println("Введите путь");
         String scan = scann.nextLine();
-        scan = "C://java//test.txt";//временно чтобы не вводить постоянно
+       /* scan = "C://java//test.txt";//временно чтобы не вводить постоянно*/
         ArrayList<String> numberr = new ArrayList<>();//массив для четных чисел
         String newnum = "";
         try { FileReader reader = new FileReader(scan);
