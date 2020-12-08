@@ -1,48 +1,33 @@
-package server;
-
-import java.io.DataInputStream;
+mport java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.Scanner;
 
-public class Server {
+public class Client {
     public static void main(String[] args) {
-        ArrayList<Socket> clients = new ArrayList<>();
-ArrayList<String> userNames= new ArrayList<>();
-        Socket socket = null;
         try {
-            ServerSocket serverSocket = new ServerSocket(8189);
-            System.out.println("INFO: Сервер запущен");
-            while (true){
-                socket = serverSocket.accept(); // Ожидаем клиента
-                DataInputStream in = new DataInputStream(socket.getInputStream()); // Поток ввода
-                DataOutputStream out = new DataOutputStream(socket.getOutputStream()); // Поток вывода
-                System.out.println("Клиент подключился");
-                clients.add(socket); //Добавляем клиента в список
-                Thread thread = new Thread(new Runnable() { // Открываем поток для клиента
-                    @Override
-                    public void run() {
-                        try {
-                            out.writeUTF("Введите имя :");
-                            String userName =in.readUTF();
-                            userNames.add(userName);
-                            while (true){
-                                System.out.println("Ожидаем сообщение...");
-                                String request = in.readUTF();
-                                System.out.println(userName+" прислал сообщение: "+request);
-                                for (Socket socket: clients) { // Перебираем список клиентов
-                                    DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-                                    out.writeUTF(userName+": "+request);
-                                }
-                            }
-                        }catch (IOException exception) {
-                            exception.printStackTrace();
+            Socket socket = new Socket("localhost",8189);
+            DataInputStream in = new DataInputStream(socket.getInputStream());
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            Thread thread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        while (true){
+                            String response = in.readUTF();
+                            System.out.println(response);
                         }
+                    }catch (IOException e){
+                        e.printStackTrace();
                     }
-                });
-                thread.start();
+                }
+            });
+            thread.start();
+            Scanner scanner = new Scanner(System.in);
+            while(true){
+                String msg = scanner.nextLine();
+                out.writeUTF(msg);
             }
         }catch (IOException exception){
             exception.printStackTrace();
